@@ -33,6 +33,15 @@ public class Environnement {
     // armoire contenant la liste des agents et une liste de message
     // on pose un message dans la liste de y pour y
 
+    private void startAgents() {
+        Iterator<Agent> it = listAgentsEnv.iterator();
+        while (it.hasNext()) {
+            Agent agent = it.next();
+            agent.run();
+        }
+
+    }
+
     public Environnement(int i0, int i1) {
 
         env = new Case[i0][i1];
@@ -55,23 +64,22 @@ public class Environnement {
 
                     switch (nbAgents) {
                         case 0:
-                            env[i][j] = new Agent(i, j, this, new Position(4, 4));
+                            env[i][j] = new Agent(i, j, this, new Position(1, 1),nbAgents);
                             break;
                         case 1:
-                            env[i][j] = new Agent(i, j, this, new Position(3, 3));
+                            env[i][j] = new Agent(i, j, this, new Position(2, 2),nbAgents);
                             break;
                         case 2:
-                            env[i][j] = new Agent(i, j, this, new Position(2, 2));
+                            env[i][j] = new Agent(i, j, this, new Position(3, 3),nbAgents);
                             break;
                         case 3:
-                            env[i][j] = new Agent(i, j, this, new Position(1, 1));
+                            env[i][j] = new Agent(i, j, this, new Position(4, 4),nbAgents);
                             break;
 
                     }
 
                     // On ajoute l'agent à la liste d'agent
                     listAgentsEnv.add((Agent) env[i][j]);
-
                     nbAgents++;
 
                 } else {
@@ -82,28 +90,9 @@ public class Environnement {
             }
 
         }
+        this.printEnv();
+        this.startAgents();
 
-    }
-
-    /*
-     * Retourne tableau contenant les voisins
-     */
-    public Case[] getVoisines(Case c) {
-        Case[] cVoisines = new Case[8];
-        // On récupère la position de la case dont on souhaite avoir les cases voisines
-        // int i = c.indexI();
-        // int j = c.indexJ();
-
-        /*
-         00 01 02
-         10 11 12
-         20 21 22
-         */
-        // haut i-1 j
-        // bas  i+1 j
-        // droite i j+1
-        // gauche i j-1
-        return null;
     }
 
     public void printEnv() {
@@ -113,51 +102,6 @@ public class Environnement {
             }
             System.out.println("");
         }
-    }
-
-    void move(Case caseE, int random) {
-        /*
-         if (random == 1) {
-         //bas
-         caseE.setI(caseE.getI());
-         caseE.setJ(caseE.getJ());
-         } else if (random == 2) {
-         //haut
-         caseE.setI(caseE.getI());
-         caseE.setJ(caseE.getJ());
-         } else if (random == 3) {
-         //gauche
-         caseE.setI(caseE.getI());
-         caseE.setJ(caseE.getJ());
-         } else if (random == 4) {
-         //droite
-         caseE.setI(caseE.getI());
-         caseE.setJ(caseE.getJ());
-         }*/
-    }
-
-    /*
-     * Retourne l'index de la case si elle existe sinon retourne null
-     */
-    public Integer calcIndexI(int i) {
-
-        if (i < 0 || i >= this.sizex) {
-            //  System.out.println("null");
-            return null;
-        } else {
-            return i;
-        }
-
-    }
-
-    public Integer calcIndexJ(int j) {
-        if (j < 0 || j >= this.sizey) {
-            //  System.out.println("null");
-            return null;
-        } else {
-            return j;
-        }
-
     }
 
     public int getSizex() {
@@ -185,7 +129,7 @@ public class Environnement {
                 return false;
             }
         }
-        return false;
+        return true;
 
     }
 }

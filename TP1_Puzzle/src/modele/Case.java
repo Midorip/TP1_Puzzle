@@ -16,14 +16,14 @@ public class Case {
 
     Environnement env;
     //position courante
-    public Position pos;
+    public Position position;
 
     public Case() {
 
     }
 
     Case(int i, int j, Environnement env) {
-        pos = new Position(i, j);
+        position = new Position(i, j);
         this.env = env;
 
     }

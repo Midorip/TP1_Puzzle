@@ -20,9 +20,9 @@ public class Agent extends Case implements Runnable {
     private boolean happy = false;
     //position terminal
     private Position posFinal;
+    //Position terminal
+    private int idAgent;
 
-    //position actuel
-    private Position position;
 
     // Liste des messages reçus
     private ArrayList<Message> listeMessagesReceive;
@@ -39,16 +39,16 @@ public class Agent extends Case implements Runnable {
         this.idAgent = idAgent;
     }
 
-    //position terminal
-    private int idAgent;
+
 
     // list messages envoyés
     //Vector vect;
     private ArrayList<Agent> listAgent;
 
-    Agent(int i, int j, Environnement env, Position posFinal) {
-        super();
+    Agent(int i, int j, Environnement env, Position posFinal, int idAgent) {
+        super(i,j,env);
         this.posFinal = posFinal;
+        this.idAgent = idAgent;
     }
 
     public void perception() {
@@ -60,7 +60,7 @@ public class Agent extends Case implements Runnable {
     }
 
     void print() {
-        System.out.print("A|");
+        System.out.print("A"+this.idAgent+"|");
     }
 
     public void seDeplacer() {
@@ -71,15 +71,15 @@ public class Agent extends Case implements Runnable {
         int random = (int) (Math.random() * (higher - lower)) + lower;
       
         //Je dis a l'environnement que je bouge
-        env.move(this, random);
+       // env.move(this, random);
 
     }
 
     public void run() {
         //Tant que le puzzle nest pas reconstitue {
         //Regarder si le but est atteint pour notre case //fin?
-
-        while (enVie) {
+        int nb = 20;
+        while (nb > 0) {
 
             Position[] posListe = new Position[2];
             //Regarder si le but est atteint pour notre case //fin?
@@ -109,31 +109,38 @@ public class Agent extends Case implements Runnable {
             
             for(int i=0;i<2;i++)
             {
-                if(posListe[i] != null )//&& this.env.testPos(posListe[i]))
+               
+               if(posListe[i] != null  && this.env.testPosLibre(posListe[i]))
                 {
                     move(posListe[i]);
+                    break;
                 }
             }
+            nb--;
         }
 
+        /*
         // On consulte ses messages et les traiter ( soit on part dans tout les cas, soit on reflechie)
         Message msgRecu = this.env.getBmsg().consulte(this);
         listeMessagesReceive.add(msgRecu);
         if (msgRecu.action == "MOVE" && msgRecu.position.isEquals(this.position)) {
             // MoveRandom permet à l'agent de se déplacer afin de ne pas géner un autre agent, sans pour autant connaitre 
             //moveRandom();
-        }
+        }*/
     }
     
-    public void move(Position pos)
+    public void move(Position posVoulu)
     {
         Case cTmp;
-        cTmp = env.env[pos.x][pos.y];
-        env.env[pos.x][pos.y] = this;
-        cTmp.pos.x = this.position.x ;
-        cTmp.pos.y = this.position.y ;
-        this.position.x = pos.x;
-        this.position.y = pos.y;
+        cTmp = env.env[posVoulu.x][posVoulu.y];
+        cTmp.position.x = this.position.x ;
+        cTmp.position.y = this.position.y ;
+        env.env[this.position.x][this.position.y] = cTmp;
+        env.env[posVoulu.x][posVoulu.y] = this;
+        
+        
+        this.position.x = posVoulu.x;
+        this.position.y = posVoulu.y;
         
     }
 

@@ -5,6 +5,7 @@
  */
 package tp1_puzzle;
 
+import static java.lang.Thread.sleep;
 import modele.Environnement;
 import utils.BoiteMessage;
 
@@ -17,10 +18,13 @@ public class TP1_Puzzle {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         // TODO code application logic here
         Environnement env = new Environnement(5,5);
+        System.out.println("");
+        sleep(5000);
         env.printEnv();
+        
         
     }
     
