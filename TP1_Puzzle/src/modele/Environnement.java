@@ -5,6 +5,8 @@
  */
 package modele;
 
+import utils.BoiteMessage;
+
 /**
  *
  * @author Epulapp
@@ -17,6 +19,12 @@ public class Environnement {
     private final int NB_OBJETS = 200;
     private int nbAgents = 0;
     private int nbObjets = 0;
+
+    public BoiteMessage getBmsg() {
+        return bmsg;
+    }
+    
+    private BoiteMessage bmsg ;
     // armoire contenant la liste des agents et une liste de message
     // on pose un message dans la liste de y pour y
 
@@ -25,6 +33,7 @@ public class Environnement {
         env = new Case[i0][i1];
         this.sizex = i0;
         this.sizey = i1;
+        bmsg = new BoiteMessage();
 
         for (int i = 0; i < sizex; i++) {
 

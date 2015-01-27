@@ -5,6 +5,8 @@
  */
 package tp1_puzzle;
 
+import utils.BoiteMessage;
+
 /**
  *
  * @author Epulapp
@@ -16,6 +18,7 @@ public class TP1_Puzzle {
      */
     public static void main(String[] args) {
         // TODO code application logic here
+        
     }
     
 }

@@ -13,17 +13,23 @@ import modele.Agent;
  */
 public class Message {
     
-    private Agent expediteur;
-    private Agent destinataire;
+    public Agent expediteur;
+    public Agent destinataire;
     // Act langage : request (pas sur qu'il fasse
     // Action : move 
     // + poistion ou plusieurs que lon quitte
-    private String act_langage;
+    public String act_langage;
     
     // Action = Move
-    private String action;
-    private Position position;
+    public String action;
+    public Position position;
     
-    public Message()
+    public Message(Agent exp, Agent dest, String action, Position pos)
+    {
+        this.expediteur = exp;
+        this.destinataire = dest;
+        this.action = action;
+        this.position = pos;
+    }
     
 }
