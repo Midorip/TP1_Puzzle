@@ -5,6 +5,8 @@
  */
 package utils;
 
+import modele.Environnement;
+
 /**
  *
  * @author Epulapp
@@ -18,6 +20,12 @@ public class Position {
         this.x = i;
         this.y = j;
     }
+    
+    public Position()
+    {
+        this.x = 0;
+        this.y = 0;
+    }
 
     public boolean isEquals(Position posCompare) {
         if (this.x == posCompare.x && this.y == posCompare.y) {
@@ -25,6 +33,14 @@ public class Position {
         } else {
             return false;
         }
+    }
+
+    public Position getDiff(Position posFinal) {
+        Position tmp = new Position();
+        
+        tmp.x = (posFinal.x - this.x);
+        tmp.y = (posFinal.y - this.y);
+        return tmp;
     }
 
 }

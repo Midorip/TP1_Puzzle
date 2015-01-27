@@ -16,7 +16,7 @@ public class Case {
 
     Environnement env;
     //position courante
-    private Position pos;
+    public Position pos;
 
     public Case() {
 

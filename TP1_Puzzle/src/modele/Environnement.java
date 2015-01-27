@@ -14,8 +14,8 @@ import utils.Position;
  */
 public class Environnement {
 
-    private Case[][] env;
-    private int sizex = 0, sizey = 0;
+    public Case[][] env;
+    public static int sizex = 0, sizey = 0;
     private final int NB_AGENTS = 4;
 
     private int nbAgents = 0;
