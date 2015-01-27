@@ -18,14 +18,13 @@ public class Agent extends Case implements Runnable {
 
     //position terminal
     private Position posFinal;
-    
+
     //position actuel
     private Position position;
-    
-        
+
     // Liste des messages reçus
     private ArrayList<Message> messagesReceive;
-    
+
     // Liste des messages envoyés
     private ArrayList<Message> messageSend;
 
@@ -36,7 +35,7 @@ public class Agent extends Case implements Runnable {
     public void setIdAgent(int idAgent) {
         this.idAgent = idAgent;
     }
-    
+
     //position terminal
     private int idAgent;
 
@@ -44,8 +43,9 @@ public class Agent extends Case implements Runnable {
     //Vector vect;
     private ArrayList<Agent> listAgent;
 
-    Agent(int i, int j, Environnement env) {
+    Agent(int i, int j, Environnement env, Position posFinal) {
         super();
+        this.posFinal = posFinal;
     }
 
     public void perception() {
@@ -54,6 +54,10 @@ public class Agent extends Case implements Runnable {
         // se deplace fait tentative de recuperer 
         //OU
         //se deplace fait tentative de poser
+    }
+
+    void print() {
+        System.out.print("A|");
     }
 
     public void seDeplacer() {
@@ -71,16 +75,14 @@ public class Agent extends Case implements Runnable {
     public void run() {
         //Tant que le puzzle nest pas reconstitue {
         //Regarder si le but est atteint pour notre case //fin?
-        
-        
+
         // On consulte ses messages et les traiter ( soit on part dans tout les cas, soit on reflechie)
         Message msgRecu = this.env.getBmsg().consulte(this);
         messagesReceive.add(msgRecu);
-        if(msgRecu.action == "MOVE" && msgRecu.position.isEquals(this.position))
-        {
+        if (msgRecu.action == "MOVE" && msgRecu.position.isEquals(this.position)) {
             // MoveRandom permet à l'agent de se déplacer afin de ne pas géner un autre agent, sans pour autant connaitre 
             //moveRandom();
-        } 
+        }
     }
 
 }
