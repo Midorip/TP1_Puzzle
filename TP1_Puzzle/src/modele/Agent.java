@@ -22,6 +22,8 @@ public class Agent extends Case implements Runnable {
     private Position posFinal;
     //Position terminal
     private int idAgent;
+    
+    private int nbIterationAgent;
 
 
     // Liste des messages reçus
@@ -45,10 +47,11 @@ public class Agent extends Case implements Runnable {
     //Vector vect;
     private ArrayList<Agent> listAgent;
 
-    Agent(int i, int j, Environnement env, Position posFinal, int idAgent) {
+    Agent(int i, int j, Environnement env, Position posFinal, int idAgent, int nbIteration) {
         super(i,j,env);
         this.posFinal = posFinal;
         this.idAgent = idAgent;
+        this.nbIterationAgent = nbIteration;
     }
 
     public void perception() {
@@ -78,7 +81,7 @@ public class Agent extends Case implements Runnable {
     public void run() {
         //Tant que le puzzle nest pas reconstitue {
         //Regarder si le but est atteint pour notre case //fin?
-        int nb = 20;
+        int nb = nbIterationAgent;
         while (nb > 0) {
 
             Position[] posListe = new Position[2];
@@ -151,6 +154,7 @@ public class Agent extends Case implements Runnable {
     public void setPosition(Position position) {
         this.position = position;
     }
+
 
 }
 
