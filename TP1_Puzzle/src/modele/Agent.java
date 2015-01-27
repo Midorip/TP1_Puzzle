@@ -45,8 +45,9 @@ public class Agent extends Case implements Runnable {
     //Vector vect;
     private ArrayList<Agent> listAgent;
 
-    Agent(int i, int j, Environnement env) {
+    Agent(int i, int j, Environnement env, Position posFinal) {
         super();
+        this.posFinal = posFinal;
     }
 
     public void perception() {
@@ -55,6 +56,10 @@ public class Agent extends Case implements Runnable {
         // se deplace fait tentative de recuperer 
         //OU
         //se deplace fait tentative de poser
+    }
+
+    void print() {
+        System.out.print("A|");
     }
 
     public void seDeplacer() {

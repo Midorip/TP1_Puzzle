@@ -6,6 +6,7 @@
 package modele;
 
 import utils.BoiteMessage;
+import utils.Position;
 
 /**
  *
@@ -15,16 +16,16 @@ public class Environnement {
 
     private Case[][] env;
     private int sizex = 0, sizey = 0;
-    private final int NB_AGENTS = 20;
-    private final int NB_OBJETS = 200;
+    private final int NB_AGENTS = 4;
+
     private int nbAgents = 0;
-    private int nbObjets = 0;
+    
 
     public BoiteMessage getBmsg() {
         return bmsg;
     }
-    
-    private BoiteMessage bmsg ;
+
+    private BoiteMessage bmsg;
     // armoire contenant la liste des agents et une liste de message
     // on pose un message dans la liste de y pour y
 
@@ -43,11 +44,28 @@ public class Environnement {
                 int lower = 1;
                 int higher = 5;
                 int random = (int) (Math.random() * (higher - lower)) + lower;
-                System.out.println("Random" + random);
-                if (random == 4 && nbAgents < NB_AGENTS) {
-                    env[i][j] = new Agent(i, j, this);
-                    nbAgents++;
               
+
+                if (random == 4 && nbAgents < NB_AGENTS) {
+
+                    switch (nbAgents) {
+                        case 0:
+                            env[i][j] = new Agent(i, j, this, new Position(4, 4));
+                            break;
+                        case 1:
+                            env[i][j] = new Agent(i, j, this, new Position(3, 3));
+                            break;
+                        case 2:
+                            env[i][j] = new Agent(i, j, this, new Position(2, 2));
+                            break;
+                        case 3:
+                            env[i][j] = new Agent(i, j, this, new Position(1, 1));
+                            break;
+
+                    }
+
+                    nbAgents++;
+
                 } else {
                     env[i][j] = new Case(i, j, this);
                 }
@@ -64,8 +82,8 @@ public class Environnement {
     public Case[] getVoisines(Case c) {
         Case[] cVoisines = new Case[8];
         // On récupère la position de la case dont on souhaite avoir les cases voisines
-       // int i = c.indexI();
-     //   int j = c.indexJ();
+        // int i = c.indexI();
+        //   int j = c.indexJ();
 
         /*
          00 01 02
@@ -79,40 +97,36 @@ public class Environnement {
         return null;
     }
 
-    @Override
-    public String toString() {
-        String environnement = "";
+    public void printEnv() {
         for (int i = 0; i < env.length; i++) {
             for (int j = 0; j < env[i].length; j++) {
-                environnement += env[i][j];
+               env[i][j].print();
             }
             System.out.println("");
         }
-        return environnement;
-
     }
 
     void move(Case caseE, int random) {
         /*
-        if (random == 1) {
-            //bas
-            caseE.setI(caseE.getI());
-            caseE.setJ(caseE.getJ());
-        } else if (random == 2) {
-            //haut
-            caseE.setI(caseE.getI());
-            caseE.setJ(caseE.getJ());
-        } else if (random == 3) {
-            //gauche
-            caseE.setI(caseE.getI());
-            caseE.setJ(caseE.getJ());
-        } else if (random == 4) {
-            //droite
-            caseE.setI(caseE.getI());
-            caseE.setJ(caseE.getJ());
-        }*/
+         if (random == 1) {
+         //bas
+         caseE.setI(caseE.getI());
+         caseE.setJ(caseE.getJ());
+         } else if (random == 2) {
+         //haut
+         caseE.setI(caseE.getI());
+         caseE.setJ(caseE.getJ());
+         } else if (random == 3) {
+         //gauche
+         caseE.setI(caseE.getI());
+         caseE.setJ(caseE.getJ());
+         } else if (random == 4) {
+         //droite
+         caseE.setI(caseE.getI());
+         caseE.setJ(caseE.getJ());
+         }*/
     }
-    
+
     /*
      * Retourne l'index de la case si elle existe sinon retourne null
      */
@@ -152,6 +166,5 @@ public class Environnement {
     public void setSizey(int sizey) {
         this.sizey = sizey;
     }
-    
 
 }

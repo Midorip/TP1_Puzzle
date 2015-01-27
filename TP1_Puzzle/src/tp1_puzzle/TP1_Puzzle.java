@@ -5,6 +5,7 @@
  */
 package tp1_puzzle;
 
+import modele.Environnement;
 import utils.BoiteMessage;
 
 /**
@@ -18,6 +19,8 @@ public class TP1_Puzzle {
      */
     public static void main(String[] args) {
         // TODO code application logic here
+        Environnement env = new Environnement(5,5);
+        env.printEnv();
         
     }
     

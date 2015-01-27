@@ -17,17 +17,19 @@ public class Case {
     Environnement env;
     //position courante
     private Position pos;
-   
-    
+
     public Case() {
 
     }
 
     Case(int i, int j, Environnement env) {
+        pos = new Position(i, j);
         this.env = env;
-        this.pos.x = i;
-        this.pos.y = j;
+
     }
 
+    void print() {
+       System.out.print("0|");
+    }
 
 }

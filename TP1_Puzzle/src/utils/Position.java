@@ -9,18 +9,22 @@ package utils;
  *
  * @author Epulapp
  */
-public class Position  {
+public class Position {
+
     public int x;
     public int y;
-    
-    public boolean isEquals(Position posCompare)
-    {
-        if(this.x == posCompare.x && this.y == posCompare.y)
-        {
-            return true;
-        }
-        else
-            return false;   
+
+    public Position(int i, int j) {
+        this.x = i;
+        this.y = j;
     }
-    
+
+    public boolean isEquals(Position posCompare) {
+        if (this.x == posCompare.x && this.y == posCompare.y) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
 }
