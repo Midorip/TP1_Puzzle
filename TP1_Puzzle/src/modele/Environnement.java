@@ -40,6 +40,8 @@ public class Environnement {
         this.sizey = i1;
         bmsg = new BoiteMessage();
 
+        // Initialisation list agent
+        listAgentsEnv = new ArrayList<Agent>();
         for (int i = 0; i < sizex; i++) {
 
             for (int j = 0; j < sizey; j++) {
