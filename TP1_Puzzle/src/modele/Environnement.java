@@ -5,6 +5,8 @@
  */
 package modele;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import utils.BoiteMessage;
 import utils.Position;
 
@@ -19,7 +21,9 @@ public class Environnement {
     private final int NB_AGENTS = 4;
 
     private int nbAgents = 0;
-    
+
+    // Liste des agents présents dans l'environnement
+    public static ArrayList<Agent> listAgentsEnv;
 
     public BoiteMessage getBmsg() {
         return bmsg;
@@ -44,7 +48,6 @@ public class Environnement {
                 int lower = 1;
                 int higher = 5;
                 int random = (int) (Math.random() * (higher - lower)) + lower;
-              
 
                 if (random == 4 && nbAgents < NB_AGENTS) {
 
@@ -64,10 +67,14 @@ public class Environnement {
 
                     }
 
+                    // On ajoute l'agent à la liste d'agent
+                    listAgentsEnv.add((Agent) env[i][j]);
+
                     nbAgents++;
 
                 } else {
                     env[i][j] = new Case(i, j, this);
+
                 }
 
             }
@@ -83,7 +90,7 @@ public class Environnement {
         Case[] cVoisines = new Case[8];
         // On récupère la position de la case dont on souhaite avoir les cases voisines
         // int i = c.indexI();
-        //   int j = c.indexJ();
+        // int j = c.indexJ();
 
         /*
          00 01 02
@@ -100,7 +107,7 @@ public class Environnement {
     public void printEnv() {
         for (int i = 0; i < env.length; i++) {
             for (int j = 0; j < env[i].length; j++) {
-               env[i][j].print();
+                env[i][j].print();
             }
             System.out.println("");
         }
@@ -167,4 +174,16 @@ public class Environnement {
         this.sizey = sizey;
     }
 
+    // Test si position libre
+    public boolean testPosLibre(Position pos) {
+        Iterator<Agent> it = listAgentsEnv.iterator();
+        while (it.hasNext()) {
+            Agent agent = it.next();
+            if (agent.getPosition().equals(pos)) {
+                return false;
+            }
+        }
+        return false;
+
+    }
 }

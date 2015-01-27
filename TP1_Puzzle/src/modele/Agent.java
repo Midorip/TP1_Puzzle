@@ -30,6 +30,7 @@ public class Agent extends Case implements Runnable {
     // Liste des messages envoyés
     private ArrayList<Message> messageSend;
 
+    
     public int getIdAgent() {
         return idAgent;
     }
@@ -68,7 +69,7 @@ public class Agent extends Case implements Runnable {
         int lower = 1;
         int higher = 5;
         int random = (int) (Math.random() * (higher - lower)) + lower;
-        System.out.println("Random 2 " + random);
+      
         //Je dis a l'environnement que je bouge
         env.move(this, random);
 
@@ -94,6 +95,14 @@ public class Agent extends Case implements Runnable {
             }
         }
 
+    }
+
+    public Position getPosition() {
+        return position;
+    }
+
+    public void setPosition(Position position) {
+        this.position = position;
     }
 
 }
