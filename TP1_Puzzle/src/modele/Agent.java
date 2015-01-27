@@ -25,7 +25,7 @@ public class Agent extends Case implements Runnable {
     private Position position;
 
     // Liste des messages reçus
-    private ArrayList<Message> messagesReceive;
+    private ArrayList<Message> listeMessagesReceive;
 
     // Liste des messages envoyés
     private ArrayList<Message> messageSend;
@@ -80,21 +80,61 @@ public class Agent extends Case implements Runnable {
         //Regarder si le but est atteint pour notre case //fin?
 
         while (enVie) {
+
+            Position[] posListe = new Position[2];
             //Regarder si le but est atteint pour notre case //fin?
             if (position.isEquals(posFinal)) {
-                  happy = true;
+                happy = true;
+            }
+            // Recherche de la solution finale
+            Position posTemp = this.position.getDiff(posFinal);
+            if (posTemp.x == 0) {
+                posListe[0] = null;
+            } else {
+                if (posTemp.x > 0) {
+                    posListe[0] = new Position(position.x + 1, position.y);
+                } else {
+                    posListe[0] = new Position(position.x - 1, position.y);
+                }
+            }
+            if (posTemp.y == 0) {
+                posListe[1] = null;
+            } else {
+                if (posTemp.y > 0) {
+                    posListe[1] = new Position(position.x, position.y  + 1);
+                } else {
+                    posListe[1] = new Position(position.x, position.y -1);
+                }
             }
             
-
-            // On consulte ses messages et les traiter ( soit on part dans tout les cas, soit on reflechie)
-            Message msgRecu = this.env.getBmsg().consulte(this);
-            messagesReceive.add(msgRecu);
-            if (msgRecu.action == "MOVE" && msgRecu.position.isEquals(this.position)) {
-            // MoveRandom permet à l'agent de se déplacer afin de ne pas géner un autre agent, sans pour autant connaitre 
-                //moveRandom();
+            for(int i=0;i<2;i++)
+            {
+                if(posListe[i] != null )//&& this.env.testPos(posListe[i]))
+                {
+                    move(posListe[i]);
+                }
             }
         }
 
+        // On consulte ses messages et les traiter ( soit on part dans tout les cas, soit on reflechie)
+        Message msgRecu = this.env.getBmsg().consulte(this);
+        listeMessagesReceive.add(msgRecu);
+        if (msgRecu.action == "MOVE" && msgRecu.position.isEquals(this.position)) {
+            // MoveRandom permet à l'agent de se déplacer afin de ne pas géner un autre agent, sans pour autant connaitre 
+            //moveRandom();
+        }
+    }
+    
+    public void move(Position pos)
+    {
+        Case cTmp;
+        cTmp = env.env[pos.x][pos.y];
+        env.env[pos.x][pos.y] = this;
+        cTmp.pos.x = this.position.x ;
+        cTmp.pos.y = this.position.y ;
+        this.position.x = pos.x;
+        this.position.y = pos.y;
+        
     }
 
     public Position getPosition() {
@@ -106,3 +146,4 @@ public class Agent extends Case implements Runnable {
     }
 
 }
+
