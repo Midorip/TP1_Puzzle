@@ -5,6 +5,8 @@
  */
 package modele;
 
+import utils.Position;
+
 /**
  *
  * @author Epulapp
@@ -14,7 +16,7 @@ public class Case {
 
     Environnement env;
     //position courante
-    private int i, j;
+    private Position pos;
    
     
     public Case() {
@@ -23,26 +25,9 @@ public class Case {
 
     Case(int i, int j, Environnement env) {
         this.env = env;
-        this.i = i;
-        this.j = j;
+        this.pos.x = i;
+        this.pos.y = j;
     }
 
-   
-
-    public int getI() {
-        return i;
-    }
-
-    public void setI(int i) {
-        this.i = i;
-    }
-
-    public int getJ() {
-        return j;
-    }
-
-    public void setJ(int j) {
-        this.j = j;
-    }
 
 }

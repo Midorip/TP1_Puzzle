@@ -84,10 +84,10 @@ public class Environnement {
     }
 
     void move(Case caseE, int random) {
+        /*
         if (random == 1) {
             //bas
             caseE.setI(caseE.getI());
-            
             caseE.setJ(caseE.getJ());
         } else if (random == 2) {
             //haut
@@ -101,7 +101,7 @@ public class Environnement {
             //droite
             caseE.setI(caseE.getI());
             caseE.setJ(caseE.getJ());
-        }
+        }*/
     }
     
     /*

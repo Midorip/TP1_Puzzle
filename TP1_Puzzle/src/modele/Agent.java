@@ -1,5 +1,9 @@
 package modele;
 
+import utils.Message;
+import java.util.ArrayList;
+import utils.Position;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -11,18 +15,23 @@ package modele;
  */
 public class Agent extends Case implements Runnable {
 
-    private int i, j;
     //position terminal
-    private int iF, jF;
+    private Position posFinal;
+    
+        
+    // Liste des messages reçus
+    private ArrayList<Message> messagesReceive;
+    
+    // Liste des messages envoyés
+    private ArrayList<Message> messageSend;
+    
 
     // list messages envoyés
     //Vector vect;
-    private Agent[] listPiece;
+    private ArrayList<Agent> listAgent;
 
     Agent(int i, int j, Environnement env) {
-        this.env = env;
-        this.i = i;
-        this.j = j;
+        super();
     }
 
     public void perception() {
