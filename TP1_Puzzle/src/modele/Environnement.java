@@ -21,12 +21,12 @@ public class Environnement {
 
     public Case[][] env;
     public static int sizex = 0, sizey = 0;
-    private  int NB_AGENTS_MAX ;
-    
+    private int NB_AGENTS_MAX;
+
     private int nbIterationAgent;
 
     private int nbAgents = 0;
-    
+
     private ArrayList<Thread> threadListe;
 
     // Liste des agents présents dans l'environnement
@@ -47,7 +47,7 @@ public class Environnement {
             Thread t = new Thread(agent);
             t.start();
             threadListe.add(t);
-           
+
         }
 
     }
@@ -60,7 +60,7 @@ public class Environnement {
         NB_AGENTS_MAX = nbAgentMax;
         bmsg = new BoiteMessage();
         nbIterationAgent = nbIterations;
-        threadListe = new ArrayList<Thread>() ;
+        threadListe = new ArrayList<Thread>();
 
         // Initialisation list agent
         listAgentsEnv = new ArrayList<Agent>();
@@ -75,26 +75,26 @@ public class Environnement {
 
                 if (random == 4 && nbAgents < NB_AGENTS_MAX) {
 
-                    int limite = sizex +1;
-                    int random1 = (int) (Math.random() * (limite - lower)) + lower; 
-                    int random2 = (int) (Math.random() * (limite - lower)) + lower;    
-                    
-                    env[i][j] = new Agent(i, j, this, new Position(nbAgents,nbAgents),nbAgents, nbIterationAgent);
+                    int limite = sizex + 1;
+                    int random1 = (int) (Math.random() * (limite - lower)) + lower;
+                    int random2 = (int) (Math.random() * (limite - lower)) + lower;
+
+                    env[i][j] = new Agent(i, j, this, new Position(random1, random2), nbAgents, nbIterationAgent);
                     /*
-                        switch (nbAgents) {
-                        case 0:
-                            env[i][j] = new Agent(i, j, this, new Position(nbAgents,nbAgents),nbAgents);
-                            break;
-                        case 1:
-                            env[i][j] = new Agent(i, j, this, new Position(2, 2),nbAgents);
-                            break;
-                        case 2:
-                            env[i][j] = new Agent(i, j, this, new Position(3, 3),nbAgents);
-                            break;
-                        case 3:
-                            env[i][j] = new Agent(i, j, this, new Position(4, 4),nbAgents);
-                            break;
-                    } */
+                     switch (nbAgents) {
+                     case 0:
+                     env[i][j] = new Agent(i, j, this, new Position(nbAgents,nbAgents),nbAgents);
+                     break;
+                     case 1:
+                     env[i][j] = new Agent(i, j, this, new Position(2, 2),nbAgents);
+                     break;
+                     case 2:
+                     env[i][j] = new Agent(i, j, this, new Position(3, 3),nbAgents);
+                     break;
+                     case 3:
+                     env[i][j] = new Agent(i, j, this, new Position(4, 4),nbAgents);
+                     break;
+                     } */
 
                     // On ajoute l'agent à la liste d'agent
                     listAgentsEnv.add((Agent) env[i][j]);
@@ -150,24 +150,37 @@ public class Environnement {
         return true;
 
     }
-    
-        public boolean finish()
-        {
-            Iterator<Thread> it = threadListe.iterator();
-            System.out.println("On est en attente... ");
-            while (it.hasNext()) {
-                Thread t = it.next();
-                System.out.println(t.getId());
-                try {
-                    while(t.isAlive())
-                    {
-                        sleep(500);
-                    }
-                    
-                } catch (InterruptedException ex) {
-                    Logger.getLogger(Environnement.class.getName()).log(Level.SEVERE, null, ex);
+
+    public boolean finishThread() {
+        Iterator<Thread> it = threadListe.iterator();
+            //System.out.println("On est en attente... ");
+
+        while (it.hasNext()) {
+            Thread t = it.next();
+            //System.out.println(t.getId());
+            try {
+                while (t.isAlive()) {
+                    sleep(500);
                 }
+
+            } catch (InterruptedException ex) {
+                Logger.getLogger(Environnement.class.getName()).log(Level.SEVERE, null, ex);
             }
-           return true;
         }
+        return true;
     }
+
+    public void printStat() {
+        float resultat = 0;
+        float tmpRes = 0;
+        Iterator<Agent> it = listAgentsEnv.iterator();
+        while (it.hasNext()) {
+            Agent agent = it.next();
+            if (agent.isHappy()) {
+                resultat++;
+            }
+        }
+        tmpRes = resultat/nbAgents*100;
+        System.out.println("Resultat OK : "+tmpRes+"% ");
+    }
+}

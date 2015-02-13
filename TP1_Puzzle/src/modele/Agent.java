@@ -63,7 +63,15 @@ public class Agent extends Case implements Runnable {
     }
 
     void print() {
-        System.out.print("A"+this.idAgent+"|");
+        if(this.isHappy())
+        {
+            System.out.print("Y|");
+        }
+        else
+        {
+            System.out.print("N|");
+        }
+        
     }
 
     public void seDeplacer() {
@@ -76,6 +84,19 @@ public class Agent extends Case implements Runnable {
         //Je dis a l'environnement que je bouge
        // env.move(this, random);
 
+    }
+    
+    public boolean isHappy()
+    {
+        if(this.position.isEquals(posFinal))
+        {
+             return true;
+        }
+        else
+        {
+            return false;
+        }
+        
     }
 
     public void run() {
@@ -135,6 +156,8 @@ public class Agent extends Case implements Runnable {
     public void move(Position posVoulu)
     {
         Case cTmp;
+        posVoulu.x = posVoulu.x % env.getSizex();
+        posVoulu.y = posVoulu.y % env.getSizey();
         cTmp = env.env[posVoulu.x][posVoulu.y];
         cTmp.position.x = this.position.x ;
         cTmp.position.y = this.position.y ;
