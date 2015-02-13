@@ -79,22 +79,18 @@ public class Environnement {
                     int random1 = (int) (Math.random() * (limite - lower)) + lower;
                     int random2 = (int) (Math.random() * (limite - lower)) + lower;
 
+                    // Les agents ont un but totalement random
+                    ArrayList<Position> listePosBut = new ArrayList<Position>();
+                    Position posTmp = new Position(random1, random2);
+                    
+                    // Test si la position voulu est déjà une pos voulu par un autre agent
+                    while ((listePosBut.contains(posTmp))) {
+                        random1 = (int) (Math.random() * (limite - lower)) + lower;
+                        random2 = (int) (Math.random() * (limite - lower)) + lower;
+                        posTmp = new Position(random1, random2);
+                    }
+                    listePosBut.add(posTmp);
                     env[i][j] = new Agent(i, j, this, new Position(random1, random2), nbAgents, nbIterationAgent);
-                    /*
-                     switch (nbAgents) {
-                     case 0:
-                     env[i][j] = new Agent(i, j, this, new Position(nbAgents,nbAgents),nbAgents);
-                     break;
-                     case 1:
-                     env[i][j] = new Agent(i, j, this, new Position(2, 2),nbAgents);
-                     break;
-                     case 2:
-                     env[i][j] = new Agent(i, j, this, new Position(3, 3),nbAgents);
-                     break;
-                     case 3:
-                     env[i][j] = new Agent(i, j, this, new Position(4, 4),nbAgents);
-                     break;
-                     } */
 
                     // On ajoute l'agent à la liste d'agent
                     listAgentsEnv.add((Agent) env[i][j]);
@@ -153,7 +149,7 @@ public class Environnement {
 
     public boolean finishThread() {
         Iterator<Thread> it = threadListe.iterator();
-            //System.out.println("On est en attente... ");
+        //System.out.println("On est en attente... ");
 
         while (it.hasNext()) {
             Thread t = it.next();
@@ -180,7 +176,7 @@ public class Environnement {
                 resultat++;
             }
         }
-        tmpRes = resultat/nbAgents*100;
-        System.out.println("Resultat OK : "+tmpRes+"% ");
+        tmpRes = resultat / nbAgents * 100;
+        System.out.println("Resultat OK : " + tmpRes + "% ");
     }
 }

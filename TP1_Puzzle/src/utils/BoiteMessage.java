@@ -13,7 +13,7 @@ import modele.Agent;
  *
  * @author Epulapp
  */
-public class  BoiteMessage {
+public  class  BoiteMessage {
     
     private static HashMap<Integer,Message> liste;
     

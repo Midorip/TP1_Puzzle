@@ -22,9 +22,8 @@ public class Agent extends Case implements Runnable {
     private Position posFinal;
     //Position terminal
     private int idAgent;
-    
-    private int nbIterationAgent;
 
+    private int nbIterationAgent;
 
     // Liste des messages reçus
     private ArrayList<Message> listeMessagesReceive;
@@ -32,7 +31,6 @@ public class Agent extends Case implements Runnable {
     // Liste des messages envoyés
     private ArrayList<Message> messageSend;
 
-    
     public int getIdAgent() {
         return idAgent;
     }
@@ -41,17 +39,16 @@ public class Agent extends Case implements Runnable {
         this.idAgent = idAgent;
     }
 
-
-
     // list messages envoyés
     //Vector vect;
     private ArrayList<Agent> listAgent;
 
     Agent(int i, int j, Environnement env, Position posFinal, int idAgent, int nbIteration) {
-        super(i,j,env);
+        super(i, j, env);
         this.posFinal = posFinal;
         this.idAgent = idAgent;
         this.nbIterationAgent = nbIteration;
+        listeMessagesReceive = new ArrayList<Message>();
     }
 
     public void perception() {
@@ -63,15 +60,12 @@ public class Agent extends Case implements Runnable {
     }
 
     void print() {
-        if(this.isHappy())
-        {
+        if (this.isHappy()) {
             System.out.print("Y|");
-        }
-        else
-        {
+        } else {
             System.out.print("N|");
         }
-        
+
     }
 
     public void seDeplacer() {
@@ -80,23 +74,18 @@ public class Agent extends Case implements Runnable {
         int lower = 1;
         int higher = 5;
         int random = (int) (Math.random() * (higher - lower)) + lower;
-      
-        //Je dis a l'environnement que je bouge
-       // env.move(this, random);
 
+        //Je dis a l'environnement que je bouge
+        // env.move(this, random);
     }
-    
-    public boolean isHappy()
-    {
-        if(this.position.isEquals(posFinal))
-        {
-             return true;
-        }
-        else
-        {
+
+    public boolean isHappy() {
+        if (this.position.isEquals(posFinal)) {
+            return true;
+        } else {
             return false;
         }
-        
+
     }
 
     public void run() {
@@ -104,70 +93,86 @@ public class Agent extends Case implements Runnable {
         //Regarder si le but est atteint pour notre case //fin?
         int nb = nbIterationAgent;
         while (nb > 0) {
+            if (!this.isHappy()) {
 
-            Position[] posListe = new Position[2];
-            //Regarder si le but est atteint pour notre case //fin?
-            if (position.isEquals(posFinal)) {
-                happy = true;
-            }
-            // Recherche de la solution finale
-            Position posTemp = this.position.getDiff(posFinal);
-            if (posTemp.x == 0) {
-                posListe[0] = null;
-            } else {
-                if (posTemp.x > 0) {
-                    posListe[0] = new Position(position.x + 1, position.y);
+                Position[] posListe = new Position[2];
+                //Regarder si le but est atteint pour notre case //fin?
+                if (position.isEquals(posFinal)) {
+                    happy = true;
+                }
+                // Recherche de la solution finale
+                Position posTemp = this.position.getDiff(posFinal);
+                if (posTemp.x == 0) {
+                    posListe[0] = null;
                 } else {
-                    posListe[0] = new Position(position.x - 1, position.y);
+                    if (posTemp.x > 0) {
+                        posListe[0] = new Position(position.x + 1, position.y);
+                    } else {
+                        posListe[0] = new Position(position.x - 1, position.y);
+                    }
                 }
-            }
-            if (posTemp.y == 0) {
-                posListe[1] = null;
-            } else {
-                if (posTemp.y > 0) {
-                    posListe[1] = new Position(position.x, position.y  + 1);
+                if (posTemp.y == 0) {
+                    posListe[1] = null;
                 } else {
-                    posListe[1] = new Position(position.x, position.y -1);
+                    if (posTemp.y > 0) {
+                        posListe[1] = new Position(position.x, position.y + 1);
+                    } else {
+                        posListe[1] = new Position(position.x, position.y - 1);
+                    }
                 }
-            }
-            
-            for(int i=0;i<2;i++)
-            {
-               
-               if(posListe[i] != null  && this.env.testPosLibre(posListe[i]))
-                {
-                    move(posListe[i]);
-                    break;
+
+                boolean haveMove = false;
+                for (int i = 0; i < 2; i++) {
+                    if (posListe[i] != null && this.env.testPosLibre(posListe[i])) {
+                        move(posListe[i]);
+                        haveMove = true;
+                        break;
+                    }
                 }
+                if (!haveMove) {
+                    Agent dest = (Agent) env.env[posListe[0].x][posListe[0].y];
+                    Message msg = new Message(this, dest, "Move", posListe[0]);
+                    env.getBmsg().envois(dest.idAgent, msg);
+                    System.out.println("Envois d'un msg...");
+                }
+            } else {
+                // On consulte ses messages et les traiter ( soit on part dans tout les cas, soit on reflechie)
+                Message msgRecu = this.env.getBmsg().consulte(this);
+                if (msgRecu != null) {
+                    System.out.println("Message reçu pour bouger, Flemme");
+                    listeMessagesReceive.add(msgRecu);
+                    if (msgRecu.action == "MOVE" && msgRecu.position.isEquals(this.position)) {
+                        System.out.println("Message reçu pour bouger, Flemme");
+                    }
+                }
+
             }
             nb--;
-        }
 
-        /*
-        // On consulte ses messages et les traiter ( soit on part dans tout les cas, soit on reflechie)
-        Message msgRecu = this.env.getBmsg().consulte(this);
-        listeMessagesReceive.add(msgRecu);
-        if (msgRecu.action == "MOVE" && msgRecu.position.isEquals(this.position)) {
-            // MoveRandom permet à l'agent de se déplacer afin de ne pas géner un autre agent, sans pour autant connaitre 
-            //moveRandom();
-        }*/
+        }
     }
-    
-    public void move(Position posVoulu)
-    {
+
+    public void move(Position posVoulu) {
         Case cTmp;
-        posVoulu.x = posVoulu.x % env.getSizex();
-        posVoulu.y = posVoulu.y % env.getSizey();
+        posVoulu.x = (posVoulu.x + env.getSizex()) % env.getSizex();
+        posVoulu.y = (posVoulu.y + env.getSizey()) % env.getSizey();
+        
+
+        
         cTmp = env.env[posVoulu.x][posVoulu.y];
-        cTmp.position.x = this.position.x ;
-        cTmp.position.y = this.position.y ;
+        cTmp.position.x = this.position.x;
+        cTmp.position.y = this.position.y;
+        
+        
         env.env[this.position.x][this.position.y] = cTmp;
         env.env[posVoulu.x][posVoulu.y] = this;
         
-        
         this.position.x = posVoulu.x;
         this.position.y = posVoulu.y;
+
+
         
+
     }
 
     public Position getPosition() {
@@ -178,6 +183,4 @@ public class Agent extends Case implements Runnable {
         this.position = position;
     }
 
-
 }
-
