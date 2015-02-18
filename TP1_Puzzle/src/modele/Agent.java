@@ -130,6 +130,7 @@ public class Agent extends Case implements Runnable {
                     }
                 }
                 if (!haveMove) {
+                    System.out.println("Move mother fuckaaa");
                     Agent dest = (Agent) env.env[posListe[0].x][posListe[0].y];
                     Message msg = new Message(this, dest, "Move", posListe[0]);
                     env.getBmsg().envois(dest.idAgent, msg);
@@ -153,24 +154,21 @@ public class Agent extends Case implements Runnable {
     }
 
     public void move(Position posVoulu) {
-        Case cTmp;
-        posVoulu.x = (posVoulu.x + env.getSizex()) % env.getSizex();
-        posVoulu.y = (posVoulu.y + env.getSizey()) % env.getSizey();
+        Case dest, cTmp2;
+        //posVoulu.x = (posVoulu.x + env.getSizex()) % env.getSizex();
+        //posVoulu.y = (posVoulu.y + env.getSizey()) % env.getSizey();
+        posVoulu.x = (posVoulu.x ) % env.getSizex();
+        posVoulu.y = (posVoulu.y ) % env.getSizey();
         
-
-        
-        cTmp = env.env[posVoulu.x][posVoulu.y];
-        cTmp.position.x = this.position.x;
-        cTmp.position.y = this.position.y;
-        
-        
-        env.env[this.position.x][this.position.y] = cTmp;
+        dest = env.env[posVoulu.x][posVoulu.y];
         env.env[posVoulu.x][posVoulu.y] = this;
-        
+        dest.position.x = this.position.x;
+        dest.position.y = this.position.y;
+          
         this.position.x = posVoulu.x;
         this.position.y = posVoulu.y;
-
-
+        
+        env.env[this.position.x][this.position.y] = dest;
         
 
     }

@@ -22,7 +22,7 @@ public class TP1_Puzzle {
         // TODO code application logic here
         int nbIterations = 200;
         int nbAgents = 5;
-        int size = 5;
+        int size = 4;
         Environnement env = new Environnement(size,size,nbAgents,nbIterations);
         System.out.println("");
         if(env.finishThread())

@@ -38,6 +38,7 @@ public  class  BoiteMessage {
     
     public synchronized void envois( int id_dest, Message msg)
     {
+        //System.out.println("H");
         liste.put(id_dest,msg);
     }
     
