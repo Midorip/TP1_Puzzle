@@ -27,6 +27,13 @@ public class Position {
         this.y = 0;
     }
 
+    @Override
+    public String toString() {
+        return " x: " + this.x + "/ y: " + this.y;
+    }
+    
+    
+
     public boolean isEquals(Position posCompare) {
         if (this.x == posCompare.x && this.y == posCompare.y) {
             return true;

@@ -64,7 +64,7 @@ public class Agent extends Case implements Runnable {
 
     void print() {
         if (this.isHappy()) {
-            System.out.print("Y"+ + this.idAgent + "|");
+            System.out.print("Y" + +this.idAgent + "|");
         } else {
             System.out.print("N" + this.idAgent + "|");
         }
@@ -96,12 +96,11 @@ public class Agent extends Case implements Runnable {
         int nb = nbIterationAgent;
         while (nb > 0) {
             if (!this.isHappy()) {
-               
+
                 System.out.println("===================================================");
                 env.printEnv();
                 System.out.println("===================================================");
-                
-                
+
                 Position[] posListe = new Position[2];
                 //Regarder si le but est atteint pour notre case //fin?
                 if (position.isEquals(posFinal)) {
@@ -128,20 +127,29 @@ public class Agent extends Case implements Runnable {
                     }
                 }
 
+             
                 boolean haveMove = false;
                 for (int i = 0; i < 2; i++) {
                     if (posListe[i] != null && this.env.testPosLibre(posListe[i])) {
                         move(posListe[i]);
                         haveMove = true;
+                       ;
                         break;
                     }
                 }
                 if (!haveMove) {
-                    System.out.println("Move mother fuckaaa");
-                    Agent dest = (Agent) env.env[posListe[0].x][posListe[0].y];
-                    Message msg = new Message(this, dest, "Move", posListe[0]);
-                    env.getBmsg().envois(dest.idAgent, msg);
-                    System.out.println("Envois d'un msg...");
+
+                    System.out.println("Move mother fuckaaa + " + this.idAgent + " n'a pas bougé" + " \n Position final ;" + this.posFinal.toString() + " \nPosition actuel : " + this.position );
+                    System.out.println(" On affiche les positions bloquées :");
+                    for (int i = 0; i < 2; i++) {
+                        if (posListe[i] != null ) {
+                            System.out.println(" posListe[i] x : " + posListe[i].x +  "posListe[i] y :" + posListe[i].y );
+                        }
+                    }
+                    /*    Agent dest = (Agent) env.env[posListe[0].x][posListe[0].y];
+                     Message msg = new Message(this, dest, "Move", posListe[0]);
+                     env.getBmsg().envois(dest.idAgent, msg);
+                     System.out.println("Envois d'un msg...");*/
                 }
             } else {
                 // On consulte ses messages et les traiter ( soit on part dans tout les cas, soit on reflechie)
@@ -155,7 +163,6 @@ public class Agent extends Case implements Runnable {
                 }
             }
             nb--;
-           
 
         }
     }
@@ -164,20 +171,23 @@ public class Agent extends Case implements Runnable {
         Case dest, cTmp2;
         //posVoulu.x = (posVoulu.x + env.getSizex()) % env.getSizex();
         //posVoulu.y = (posVoulu.y + env.getSizey()) % env.getSizey();
-        
-        posVoulu.x = (posVoulu.x ) % env.getSizex();
-        posVoulu.y = (posVoulu.y ) % env.getSizey();
-        
+
+        posVoulu.x = (posVoulu.x) % env.getSizex();
+        posVoulu.y = (posVoulu.y) % env.getSizey();
+
         dest = env.env[posVoulu.x][posVoulu.y];
-        env.env[posVoulu.x][posVoulu.y] = this;
+        
+        env.env[posVoulu.x][posVoulu.y] =  this;
+        System.out.println("zzz");
+        if (env.env[posVoulu.x][posVoulu.y] instanceof Agent){System.out.println("Agenttt");}
+        
         dest.position.x = this.position.x;
         dest.position.y = this.position.y;
-          
+
         this.position.x = posVoulu.x;
         this.position.y = posVoulu.y;
-        
-        env.env[dest.position.x][dest.position.y] = dest;
-        
+
+        env.env[dest.position.x][dest.position.y] =  dest;
 
     }
 

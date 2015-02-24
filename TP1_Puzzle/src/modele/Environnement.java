@@ -137,10 +137,15 @@ public class Environnement {
 
     // Test si position libre
     public boolean testPosLibre(Position pos) {
-        if(env[pos.x][pos.y] instanceof Agent)
-            return true;
-        else 
-            return false;
+        Iterator<Agent> it = listAgentsEnv.iterator();
+        while (it.hasNext()) {
+            Agent agent = it.next();
+            if(pos.isEquals(agent.getPosition()))
+            {
+                        return false;
+            }
+        }
+        return true;
     }
 
     public boolean finishThread() {
@@ -153,6 +158,7 @@ public class Environnement {
             try {
                 while (t.isAlive()) {
                     sleep(500);
+                    
                 }
 
             } catch (InterruptedException ex) {
