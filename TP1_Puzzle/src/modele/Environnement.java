@@ -73,11 +73,12 @@ public class Environnement {
                 int higher = 5;
                 int random = (int) (Math.random() * (higher - lower)) + lower;
 
+                
                 if (random == 4 && nbAgents < NB_AGENTS_MAX) {
 
-                    int limite = sizex + 1;
-                    int random1 = (int) (Math.random() * (limite - lower)) + lower;
-                    int random2 = (int) (Math.random() * (limite - lower)) + lower;
+                    int limite = sizex ;
+                    int random1 = (int) (Math.random() * (limite )) ;
+                    int random2 = (int) (Math.random() * (limite )) ;
 
                     // Les agents ont un but totalement random
                     ArrayList<Position> listePosBut = new ArrayList<Position>();
@@ -85,8 +86,8 @@ public class Environnement {
                     
                     // Test si la position voulu est déjà une pos voulu par un autre agent
                     while ((listePosBut.contains(posTmp))) {
-                        random1 = (int) (Math.random() * (limite - lower)) + lower;
-                        random2 = (int) (Math.random() * (limite - lower)) + lower;
+                        random1 = (int) (Math.random() * (limite )) ;
+                        random2 = (int) (Math.random() * (limite )) ;
                         posTmp = new Position(random1, random2);
                     }
                     listePosBut.add(posTmp);
@@ -175,6 +176,7 @@ public class Environnement {
             if (agent.isHappy()) {
                 resultat++;
             }
+            System.out.println(agent.getIdAgent() + " is happy or not ? : " + agent.isHappy());
         }
         tmpRes = resultat / nbAgents * 100;
         System.out.println("Resultat OK : " + tmpRes + "% ");

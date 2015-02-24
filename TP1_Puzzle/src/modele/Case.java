@@ -29,7 +29,7 @@ public class Case {
     }
 
     void print() {
-       System.out.print("0|");
+       System.out.print("0 |");
     }
 
 }

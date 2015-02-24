@@ -61,9 +61,9 @@ public class Agent extends Case implements Runnable {
 
     void print() {
         if (this.isHappy()) {
-            System.out.print("Y|");
+            System.out.print("Y"+ + this.idAgent + "|");
         } else {
-            System.out.print("N|");
+            System.out.print("N" + this.idAgent + "|");
         }
     }
 
@@ -93,7 +93,12 @@ public class Agent extends Case implements Runnable {
         int nb = nbIterationAgent;
         while (nb > 0) {
             if (!this.isHappy()) {
-
+               
+                System.out.println("===================================================");
+                env.printEnv();
+                System.out.println("===================================================");
+                
+                
                 Position[] posListe = new Position[2];
                 //Regarder si le but est atteint pour notre case //fin?
                 if (position.isEquals(posFinal)) {
