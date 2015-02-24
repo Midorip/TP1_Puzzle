@@ -130,6 +130,7 @@ public class Agent extends Case implements Runnable {
              
                 boolean haveMove = false;
                 for (int i = 0; i < 2; i++) {
+                 
                     if (posListe[i] != null && this.env.testPosLibre(posListe[i])) {
                         move(posListe[i]);
                         haveMove = true;
@@ -144,6 +145,7 @@ public class Agent extends Case implements Runnable {
                     for (int i = 0; i < 2; i++) {
                         if (posListe[i] != null ) {
                             System.out.println(" posListe[i] x : " + posListe[i].x +  "posListe[i] y :" + posListe[i].y );
+                            System.out.println(" Doit etre  :" +env.testPosLibre(posListe[i]));
                         }
                     }
                     /*    Agent dest = (Agent) env.env[posListe[0].x][posListe[0].y];

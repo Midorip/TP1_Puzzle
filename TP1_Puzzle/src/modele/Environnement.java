@@ -64,6 +64,7 @@ public class Environnement {
 
         // Initialisation list agent
         listAgentsEnv = new ArrayList<Agent>();
+        ArrayList<Position> listePosBut = new ArrayList<Position>();
         for (int i = 0; i < sizex; i++) {
 
             for (int j = 0; j < sizey; j++) {
@@ -73,26 +74,42 @@ public class Environnement {
                 int higher = 5;
                 int random = (int) (Math.random() * (higher - lower)) + lower;
 
-                
                 if (random == 4 && nbAgents < NB_AGENTS_MAX) {
 
                     int limite = sizex;
-                    int random1 = (int) (Math.random() * (limite)) ;
-                    int random2 = (int) (Math.random() * (limite)) ;
+                    int random1 = 0;
+                    int random2 = 0;
 
                     // Les agents ont un but totalement random
-                    ArrayList<Position> listePosBut = new ArrayList<Position>();
-                    Position posTmp = new Position(random1, random2);
                     
+                    Position posTmp = null;
+
                     // Test si la position voulu est déjà une pos voulu par un autre agent
-                    while ((listePosBut.contains(posTmp))) {
+                    boolean test = true;
+                    boolean found = false;
+                    while (test) {
+                        found = false;
                         random1 = (int) (Math.random() * (limite));
                         random2 = (int) (Math.random() * (limite));
                         posTmp = new Position(random1, random2);
+                        Iterator<Position> it = listePosBut.iterator();
+                        while (it.hasNext()) {
+                            
+                            Position pos = it.next();
+                            if (pos.isEquals(posTmp)) {
+                                found = true;
+                                System.out.println("Trouvé ! ");
+                                break;
+                            }
+                        }
+                        if(!found)
+                            test=false;
                     }
                     listePosBut.add(posTmp);
-                    env[i][j] = new Agent(i, j, this, new Position(random1, random2), nbAgents, nbIterationAgent);
+                   // System.out.println(listePosBut.size());
 
+                    env[i][j] = new Agent(i, j, this, new Position(random1, random2), nbAgents, nbIterationAgent);
+                    System.out.println(random1 + "|" + random2);
                     // On ajoute l'agent à la liste d'agent
                     listAgentsEnv.add((Agent) env[i][j]);
                     nbAgents++;
@@ -138,11 +155,12 @@ public class Environnement {
     // Test si position libre
     public boolean testPosLibre(Position pos) {
         Iterator<Agent> it = listAgentsEnv.iterator();
+
         while (it.hasNext()) {
             Agent agent = it.next();
-            if(pos.isEquals(agent.getPosition()))
-            {
-                        return false;
+            System.out.println("id Agent: " + agent.getIdAgent() + "  " + agent.position.toString());
+            if (pos.isEquals(agent.getPosition())) {
+                return false;
             }
         }
         return true;
@@ -158,7 +176,7 @@ public class Environnement {
             try {
                 while (t.isAlive()) {
                     sleep(500);
-                    
+
                 }
 
             } catch (InterruptedException ex) {
