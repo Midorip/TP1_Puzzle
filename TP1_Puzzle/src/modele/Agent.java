@@ -65,7 +65,6 @@ public class Agent extends Case implements Runnable {
         } else {
             System.out.print("N|");
         }
-
     }
 
     public void seDeplacer() {
@@ -157,6 +156,7 @@ public class Agent extends Case implements Runnable {
         Case dest, cTmp2;
         //posVoulu.x = (posVoulu.x + env.getSizex()) % env.getSizex();
         //posVoulu.y = (posVoulu.y + env.getSizey()) % env.getSizey();
+        
         posVoulu.x = (posVoulu.x ) % env.getSizex();
         posVoulu.y = (posVoulu.y ) % env.getSizey();
         
@@ -168,7 +168,7 @@ public class Agent extends Case implements Runnable {
         this.position.x = posVoulu.x;
         this.position.y = posVoulu.y;
         
-        env.env[this.position.x][this.position.y] = dest;
+        env.env[dest.position.x][dest.position.y] = dest;
         
 
     }
