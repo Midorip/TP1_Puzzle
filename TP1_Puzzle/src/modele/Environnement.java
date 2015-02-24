@@ -75,9 +75,9 @@ public class Environnement {
 
                 if (random == 4 && nbAgents < NB_AGENTS_MAX) {
 
-                    int limite = sizex + 1;
-                    int random1 = (int) (Math.random() * (limite - lower)) + lower;
-                    int random2 = (int) (Math.random() * (limite - lower)) + lower;
+                    int limite = sizex;
+                    int random1 = (int) (Math.random() * (limite)) ;
+                    int random2 = (int) (Math.random() * (limite)) ;
 
                     // Les agents ont un but totalement random
                     ArrayList<Position> listePosBut = new ArrayList<Position>();
@@ -85,8 +85,8 @@ public class Environnement {
                     
                     // Test si la position voulu est déjà une pos voulu par un autre agent
                     while ((listePosBut.contains(posTmp))) {
-                        random1 = (int) (Math.random() * (limite - lower)) + lower;
-                        random2 = (int) (Math.random() * (limite - lower)) + lower;
+                        random1 = (int) (Math.random() * (limite));
+                        random2 = (int) (Math.random() * (limite));
                         posTmp = new Position(random1, random2);
                     }
                     listePosBut.add(posTmp);
@@ -136,15 +136,10 @@ public class Environnement {
 
     // Test si position libre
     public boolean testPosLibre(Position pos) {
-        Iterator<Agent> it = listAgentsEnv.iterator();
-        while (it.hasNext()) {
-            Agent agent = it.next();
-            if (agent.getPosition().equals(pos)) {
-                return false;
-            }
-        }
-        return true;
-
+        if(env[pos.x][pos.y] instanceof Agent)
+            return true;
+        else 
+            return false;
     }
 
     public boolean finishThread() {

@@ -2,6 +2,9 @@ package modele;
 
 import utils.Message;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import utils.BoiteMessage;
 import utils.Position;
 
@@ -145,9 +148,9 @@ public class Agent extends Case implements Runnable {
                         System.out.println("Message reçu pour bouger, Flemme");
                     }
                 }
-
             }
             nb--;
+           
 
         }
     }
