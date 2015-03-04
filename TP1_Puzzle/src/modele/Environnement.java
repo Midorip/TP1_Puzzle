@@ -127,7 +127,7 @@ public class Environnement {
 
     }
 
-    public void printEnv() {
+    public synchronized void printEnv() {
         for (int i = 0; i < env.length; i++) {
             for (int j = 0; j < env[i].length; j++) {
                 env[i][j].print();
@@ -153,15 +153,35 @@ public class Environnement {
     }
 
     // Test si position libre
-    public boolean testPosLibre(Position pos) {
+    public synchronized boolean testPosLibre(Position pos) {
         Iterator<Agent> it = listAgentsEnv.iterator();
 
         while (it.hasNext()) {
             Agent agent = it.next();
-            System.out.println("id Agent: " + agent.getIdAgent() + "  " + agent.position.toString());
-            if (pos.isEquals(agent.getPosition())) {
+          //  System.out.println("id Agent: " + agent.getIdAgent() + "  " + agent.position.toString());
+         try {
+               if (pos.isEquals(agent.getPosition())) {
                 return false;
             }
+         }catch (Exception e){
+             System.out.println("Bug, pos: "+ pos + "agent pos :" + agent.getPosition());
+             e.printStackTrace();
+         }
+          
+        }
+        return true;
+    }
+    
+     // Test si position libre
+    public synchronized boolean testAllAgentHappy() {
+        Iterator<Agent> it = listAgentsEnv.iterator();
+
+        while (it.hasNext()) {
+            Agent agent = it.next();
+         
+           if(!agent.isHappy()) return false;
+              
+            
         }
         return true;
     }

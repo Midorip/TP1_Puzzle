@@ -20,9 +20,12 @@ public class TP1_Puzzle {
      */
     public static void main(String[] args) throws InterruptedException {
         // TODO code application logic here
-        int nbIterations = 1000;
-        int nbAgents = 3;
-        int size = 3;
+        int nbIterations = 0; // TO DEL
+    
+      /*  int nbAgents = 5;
+        int size = 4;*/
+        int nbAgents = 15;
+        int size = 5;
         Environnement env = new Environnement(size,size,nbAgents,nbIterations);
         System.out.println("");
         if(env.finishThread())

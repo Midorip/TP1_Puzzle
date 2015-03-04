@@ -23,6 +23,7 @@ public class Agent extends Case implements Runnable {
     private boolean happy = false;
     //position terminal
     private Position posFinal;
+
     //Position terminal
     private int idAgent;
 
@@ -90,21 +91,28 @@ public class Agent extends Case implements Runnable {
 
     }
 
-    public void run() {
+    public synchronized void run() {
         //Tant que le puzzle nest pas reconstitue {
         //Regarder si le but est atteint pour notre case //fin?
         int nb = nbIterationAgent;
-        while (nb > 0) {
-            if (!this.isHappy()) {
 
+        while (!env.testAllAgentHappy()) {
+            System.out.print("2");
+
+            while (!this.isHappy()) {
+  
+                System.out.println("agent" + this.getIdAgent() + " is " + this.isHappy());
                 System.out.println("===================================================");
                 env.printEnv();
                 System.out.println("===================================================");
 
                 Position[] posListe = new Position[2];
                 //Regarder si le but est atteint pour notre case //fin?
+
                 if (position.isEquals(posFinal)) {
                     happy = true;
+                } else {
+                    happy = false;
                 }
                 // Recherche de la solution finale
                 Position posTemp = this.position.getDiff(posFinal);
@@ -127,50 +135,152 @@ public class Agent extends Case implements Runnable {
                     }
                 }
 
-             
                 boolean haveMove = false;
                 for (int i = 0; i < 2; i++) {
-                 
-                    if (posListe[i] != null && this.env.testPosLibre(posListe[i])) {
-                        move(posListe[i]);
-                        haveMove = true;
-                       ;
-                        break;
-                    }
-                }
-                if (!haveMove) {
 
-                    System.out.println("Move mother fuckaaa + " + this.idAgent + " n'a pas bougé" + " \n Position final ;" + this.posFinal.toString() + " \nPosition actuel : " + this.position );
-                    System.out.println(" On affiche les positions bloquées :");
-                    for (int i = 0; i < 2; i++) {
-                        if (posListe[i] != null ) {
-                            System.out.println(" posListe[i] x : " + posListe[i].x +  "posListe[i] y :" + posListe[i].y );
-                            System.out.println(" Doit etre  :" +env.testPosLibre(posListe[i]));
+                    if (posListe[i] != null) {
+                        if (this.env.testPosLibre(posListe[i]) && haveMove != true) {
+                            move(posListe[i]);
+                            haveMove = true;
+
                         }
                     }
-                    /*    Agent dest = (Agent) env.env[posListe[0].x][posListe[0].y];
-                     Message msg = new Message(this, dest, "Move", posListe[0]);
-                     env.getBmsg().envois(dest.idAgent, msg);
-                     System.out.println("Envois d'un msg...");*/
-                }
-            } else {
-                // On consulte ses messages et les traiter ( soit on part dans tout les cas, soit on reflechie)
-                Message msgRecu = this.env.getBmsg().consulte(this);
-                if (msgRecu != null) {
-                    System.out.println("Message reçu pour bouger, Flemme");
-                    listeMessagesReceive.add(msgRecu);
-                    if (msgRecu.action == "MOVE" && msgRecu.position.isEquals(this.position)) {
-                        System.out.println("Message reçu pour bouger, Flemme");
-                    }
-                }
-            }
-            nb--;
 
+                }
+
+                if (position.isEquals(posFinal)) {
+                    happy = true;
+                } else {
+                    happy = false;
+                }
+
+                System.out.println("id agent" + this.getIdAgent() + "Position courante : " + position.toString() + " position final " + posFinal.toString());
+                if (!haveMove && !this.isHappy()) {
+
+                    System.out.println("Move mother fuckaaa + " + this.idAgent + " n'a pas bougé" + " \n Position final ;" + this.posFinal.toString() + " \nPosition actuel : " + this.position);
+                    System.out.println(" On affiche les positions bloquées :");
+                    boolean pos0NN = false;
+                    boolean pos1NN = false;
+
+                    for (int i = 0; i < 2; i++) {
+                        if (posListe[i] != null) {
+                            System.out.println(" posListe[i] x : " + posListe[i].x + "posListe[i] y :" + posListe[i].y);
+                            System.out.println(" Doit etre  :" + env.testPosLibre(posListe[i]));
+                            if (i == 0) {
+                                pos0NN = true;
+                            }
+                            if (i == 1) {
+                                pos1NN = true;
+                            }
+
+                        }
+                    }
+
+                    if (pos0NN) {
+                        System.out.println("Envois d'un msg... à x: " + posListe[0].x + " y: " + posListe[0].y);
+                        try {
+                     
+                            Agent dest = (Agent) env.env[posListe[0].x][posListe[0].y];
+                      
+                        Message msg = new Message(this, dest, "MOVE", posListe[0]);
+                        env.getBmsg().envois(dest.idAgent, msg);
+                        
+                          } catch (Exception e) {
+
+                            if (env.env[posListe[0].x][posListe[0].y] instanceof Agent) {
+                                System.out.println(posListe[0].x + ";"+  posListe[0].y + " Agent");
+                            } else {
+                                System.out.println(posListe[0].x + ";"+  posListe[0].y +" Non Agent");
+                            }
+                           // e.printStackTrace();
+                        }
+
+                    } else if (pos1NN) {
+                        
+                        try {
+                        System.out.println("Envois d'un msg... à x: " + posListe[1].x + " y: " + posListe[1].y);
+
+                        Agent dest = (Agent) env.env[posListe[1].x][posListe[1].y];
+                        Message msg = new Message(this, dest, "MOVE", posListe[1]);
+                        env.getBmsg().envois(dest.idAgent, msg);
+                        
+                             } catch (Exception e) {
+
+                             if (env.env[posListe[1].x][posListe[1].y] instanceof Agent) {
+                                System.out.println(posListe[1].x + ";"+  posListe[1].y + " Agent");
+                            } else {
+                                System.out.println(posListe[1].x + ";"+  posListe[1].y +" Non Agent");
+                            }
+                            //  e.printStackTrace();
+                        }
+                    }
+
+                }
+
+                //Si ils s'entrebloquent ils doivent tout de meme consulter leur msg:
+                consultAndMove();
+            }
+
+            while (this.isHappy() && !env.testAllAgentHappy()) {// Sinon il meurt et ne recoit jamais de message 
+
+                consultAndMove();
+
+            }
+        }
+
+        System.out.println(" Agent " + this.getIdAgent() + " est mort ");
+    }
+
+    public void consultAndMove() {
+
+        // On consulte ses messages et les traiter ( soit on part dans tout les cas, soit on reflechie)
+        Message msgRecu = this.env.getBmsg().consulte(this);
+        if (msgRecu != null) {
+            System.out.println(this.getIdAgent() + " a recu un Message pour bouger;;;");
+            listeMessagesReceive.add(msgRecu);
+            if (msgRecu.action == "MOVE" && msgRecu.position.isEquals(this.position)) {
+                System.out.println("Message reçu pour bouger, OK je bouge");
+                System.out.println("Position courante : " + position.toString());
+                int x = this.position.x;
+                int y = this.position.y;
+                Position pHaut = null, pBas = null, pGauche = null, pDroite = null;
+
+                if ((x - 1) > 0) {
+                    pHaut = new Position(x - 1, y);
+                }
+                if ((y + 1) < env.getSizey()) {
+                    pDroite = new Position(x, y + 1);
+                }
+                if ((y - 1) > 0) {
+                    pGauche = new Position(x, y - 1);
+                }
+                if ((x + 1) < env.getSizex()) {
+                    pBas = new Position(x + 1, y);
+                }
+
+                if (pHaut != null && env.testPosLibre(pHaut)) {
+                    move(pHaut);
+                } else if (pBas != null && env.testPosLibre(pBas)) {
+                    move(pBas);
+                } else if (pGauche != null && env.testPosLibre(pGauche)) {
+                    move(pGauche);
+                } else if (pDroite != null && env.testPosLibre(pDroite)) {
+                    move(pDroite);
+                }
+
+                if (position.isEquals(posFinal)) {
+                    happy = true;
+                } else {
+                    happy = false;
+                }
+                System.out.println("Apres move Position courante : " + position.toString() + " h " + this.happy);
+
+            }
         }
     }
 
     public void move(Position posVoulu) {
-        Case dest, cTmp2;
+        Case dest;
         //posVoulu.x = (posVoulu.x + env.getSizex()) % env.getSizex();
         //posVoulu.y = (posVoulu.y + env.getSizey()) % env.getSizey();
 
@@ -178,18 +288,16 @@ public class Agent extends Case implements Runnable {
         posVoulu.y = (posVoulu.y) % env.getSizey();
 
         dest = env.env[posVoulu.x][posVoulu.y];
-        
-        env.env[posVoulu.x][posVoulu.y] =  this;
-        System.out.println("zzz");
-        if (env.env[posVoulu.x][posVoulu.y] instanceof Agent){System.out.println("Agenttt");}
-        
+
+        env.env[posVoulu.x][posVoulu.y] = this;
+
         dest.position.x = this.position.x;
         dest.position.y = this.position.y;
 
         this.position.x = posVoulu.x;
         this.position.y = posVoulu.y;
 
-        env.env[dest.position.x][dest.position.y] =  dest;
+        env.env[dest.position.x][dest.position.y] = dest;
 
     }
 
