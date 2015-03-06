@@ -26,7 +26,7 @@ public class Environnement {
     private int nbIterationAgent;
 
     private int nbAgents = 0;
-
+    private int nbCoupAgentsTotaux=0;
     private ArrayList<Thread> threadListe;
 
     // Liste des agents présents dans l'environnement
@@ -69,12 +69,12 @@ public class Environnement {
 
             for (int j = 0; j < sizey; j++) {
 
-                // probabilité 1/4
+                // probabilité 1/2
                 int lower = 1;
-                int higher = 5;
+                int higher = 3;
                 int random = (int) (Math.random() * (higher - lower)) + lower;
 
-                if (random == 4 && nbAgents < NB_AGENTS_MAX) {
+                if (random == 2  && nbAgents < NB_AGENTS_MAX) {
 
                     int limite = sizex;
                     int random1 = 0;
@@ -219,5 +219,17 @@ public class Environnement {
         }
         tmpRes = resultat / nbAgents * 100;
         System.out.println("Resultat OK : " + tmpRes + "% ");
+    }
+
+    synchronized void incrementCt() {
+       nbCoupAgentsTotaux++;
+    }
+
+    public synchronized int getNbCoupAgentsTotaux() {
+        return nbCoupAgentsTotaux;
+    }
+
+    public void setNbCoupAgentsTotaux(int nbCoupAgentsTotaux) {
+        this.nbCoupAgentsTotaux = nbCoupAgentsTotaux;
     }
 }

@@ -24,7 +24,7 @@ public class TP1_Puzzle {
     
       /*  int nbAgents = 5;
         int size = 4;*/
-        int nbAgents = 15;
+        int nbAgents = 10;
         int size = 5;
         Environnement env = new Environnement(size,size,nbAgents,nbIterations);
         System.out.println("");

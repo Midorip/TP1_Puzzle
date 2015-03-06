@@ -29,11 +29,16 @@ public class Agent extends Case implements Runnable {
 
     private int nbIterationAgent;
 
+    //Utilité agent
+    private int utilIndiv = 0;
+
     // Liste des messages reçus
     private ArrayList<Message> listeMessagesReceive;
 
     // Liste des messages envoyés
     private ArrayList<Message> messageSend;
+
+    public int nbCoupsAgent = 0;
 
     public int getIdAgent() {
         return idAgent;
@@ -55,31 +60,12 @@ public class Agent extends Case implements Runnable {
         listeMessagesReceive = new ArrayList<Message>();
     }
 
-    public void perception() {
-        //env.getvoisin
-
-        // se deplace fait tentative de recuperer 
-        //OU
-        //se deplace fait tentative de poser
-    }
-
     void print() {
         if (this.isHappy()) {
             System.out.print("Y" + +this.idAgent + "|");
         } else {
             System.out.print("N" + this.idAgent + "|");
         }
-    }
-
-    public void seDeplacer() {
-
-        // probabilité 1/4
-        int lower = 1;
-        int higher = 5;
-        int random = (int) (Math.random() * (higher - lower)) + lower;
-
-        //Je dis a l'environnement que je bouge
-        // env.move(this, random);
     }
 
     public boolean isHappy() {
@@ -97,10 +83,11 @@ public class Agent extends Case implements Runnable {
         int nb = nbIterationAgent;
 
         while (!env.testAllAgentHappy()) {
-            System.out.print("2");
 
             while (!this.isHappy()) {
-  
+                
+                utilIndiv = 0;
+
                 System.out.println("agent" + this.getIdAgent() + " is " + this.isHappy());
                 System.out.println("===================================================");
                 env.printEnv();
@@ -141,6 +128,7 @@ public class Agent extends Case implements Runnable {
                     if (posListe[i] != null) {
                         if (this.env.testPosLibre(posListe[i]) && haveMove != true) {
                             move(posListe[i]);
+
                             haveMove = true;
 
                         }
@@ -179,37 +167,37 @@ public class Agent extends Case implements Runnable {
                     if (pos0NN) {
                         System.out.println("Envois d'un msg... à x: " + posListe[0].x + " y: " + posListe[0].y);
                         try {
-                     
+
                             Agent dest = (Agent) env.env[posListe[0].x][posListe[0].y];
-                      
-                        Message msg = new Message(this, dest, "MOVE", posListe[0]);
-                        env.getBmsg().envois(dest.idAgent, msg);
-                        
-                          } catch (Exception e) {
+
+                            Message msg = new Message(this, dest, "MOVE", posListe[0]);
+                            env.getBmsg().envois(dest.idAgent, msg);
+
+                        } catch (Exception e) {
 
                             if (env.env[posListe[0].x][posListe[0].y] instanceof Agent) {
-                                System.out.println(posListe[0].x + ";"+  posListe[0].y + " Agent");
+                                System.out.println(posListe[0].x + ";" + posListe[0].y + " Agent");
                             } else {
-                                System.out.println(posListe[0].x + ";"+  posListe[0].y +" Non Agent");
+                                System.out.println(posListe[0].x + ";" + posListe[0].y + " Non Agent");
                             }
-                           // e.printStackTrace();
+                            // e.printStackTrace();
                         }
 
                     } else if (pos1NN) {
-                        
+
                         try {
-                        System.out.println("Envois d'un msg... à x: " + posListe[1].x + " y: " + posListe[1].y);
+                            System.out.println("Envois d'un msg... à x: " + posListe[1].x + " y: " + posListe[1].y);
 
-                        Agent dest = (Agent) env.env[posListe[1].x][posListe[1].y];
-                        Message msg = new Message(this, dest, "MOVE", posListe[1]);
-                        env.getBmsg().envois(dest.idAgent, msg);
-                        
-                             } catch (Exception e) {
+                            Agent dest = (Agent) env.env[posListe[1].x][posListe[1].y];
+                            Message msg = new Message(this, dest, "MOVE", posListe[1]);
+                            env.getBmsg().envois(dest.idAgent, msg);
 
-                             if (env.env[posListe[1].x][posListe[1].y] instanceof Agent) {
-                                System.out.println(posListe[1].x + ";"+  posListe[1].y + " Agent");
+                        } catch (Exception e) {
+
+                            if (env.env[posListe[1].x][posListe[1].y] instanceof Agent) {
+                                System.out.println(posListe[1].x + ";" + posListe[1].y + " Agent");
                             } else {
-                                System.out.println(posListe[1].x + ";"+  posListe[1].y +" Non Agent");
+                                System.out.println(posListe[1].x + ";" + posListe[1].y + " Non Agent");
                             }
                             //  e.printStackTrace();
                         }
@@ -221,14 +209,19 @@ public class Agent extends Case implements Runnable {
                 consultAndMove();
             }
 
+            if (nbCoupsAgent != 0) utilIndiv = env.getNbCoupAgentsTotaux() / nbCoupsAgent;
+            
             while (this.isHappy() && !env.testAllAgentHappy()) {// Sinon il meurt et ne recoit jamais de message 
 
                 consultAndMove();
 
             }
+            
         }
 
-        System.out.println(" Agent " + this.getIdAgent() + " est mort ");
+        utilIndiv += 100;
+        
+        System.out.println(" Agent " + this.getIdAgent() + " est mort avec utilité : " + utilIndiv + " avec un nb coup de : " + this.nbCoupsAgent + " nbcoup tot ; "+ env.getNbCoupAgentsTotaux());
     }
 
     public void consultAndMove() {
@@ -274,7 +267,9 @@ public class Agent extends Case implements Runnable {
                     happy = false;
                 }
                 System.out.println("Apres move Position courante : " + position.toString() + " h " + this.happy);
-
+                // maximiser la somme de lutilité de tout le monde
+                // chaque agent voit tout le monde
+                //
             }
         }
     }
@@ -298,6 +293,9 @@ public class Agent extends Case implements Runnable {
         this.position.y = posVoulu.y;
 
         env.env[dest.position.x][dest.position.y] = dest;
+
+        nbCoupsAgent++;
+        this.env.incrementCt();
 
     }
 
