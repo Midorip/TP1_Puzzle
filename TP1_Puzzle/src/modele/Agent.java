@@ -16,6 +16,8 @@ import utils.Position;
 /**
  *
  * @author Epulapp
+ * 
+ * Rapport : mettre en valeur ce qui fonctionne + capture d'écran
  */
 public class Agent extends Case implements Runnable {
 
